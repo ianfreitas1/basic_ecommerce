@@ -1,5 +1,8 @@
 import { Router } from 'express';
+import ProductController from './app/controllers/ProductController';
 
-routes = new Router();
+const routes = new Router();
+
+routes.get('/products', ProductController.index);
 
 export default routes;
