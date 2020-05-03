@@ -19,7 +19,6 @@ class OrderController {
           attributes: ['name', 'email'],
         },
       ],
-      order: ['name'],
     });
 
     return res.json(orders);
@@ -59,6 +58,25 @@ class OrderController {
     });
 
     return res.json(order);
+  }
+
+  async delete(req, res) {
+    const order = await Order.findByPk(req.params.id);
+
+    if (order.user_id !== req.userId) {
+      return res
+        .status(401)
+        .json({ error: 'You can only delete your own orders.' });
+    }
+
+    const product = await Product.findByPk(order.product_id);
+
+    product.stock += order.item_quantity;
+    product.save();
+
+    await order.destroy();
+
+    return res.status(204).json();
   }
 }
 
