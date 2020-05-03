@@ -26,5 +26,6 @@ routes.delete('/products/:id', ProductDetailController.delete);
 routes.get('/orders', OrderController.index);
 routes.post('/orders', OrderController.store);
 routes.delete('/orders/:id', OrderController.delete);
+routes.put('/orders/:id', OrderController.update);
 
 export default routes;

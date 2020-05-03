@@ -78,6 +78,51 @@ class OrderController {
 
     return res.status(204).json();
   }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      item_quantity: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Invalid request body.' });
+    }
+
+    const order = await Order.findByPk(req.params.id);
+
+    if (order.user_id !== req.userId) {
+      return res
+        .status(401)
+        .json({ error: 'You can only update your own orders' });
+    }
+
+    const product = await Product.findByPk(order.product_id);
+    const actualStock = product.stock;
+
+    const oldQuantity = order.item_quantity;
+    const { item_quantity } = req.body;
+
+    if (
+      oldQuantity < item_quantity &&
+      actualStock < item_quantity - oldQuantity
+    ) {
+      return res.status(400).json({ error: 'Stock unavailable.' });
+    }
+
+    product.stock -= item_quantity - oldQuantity;
+    product.save();
+
+    const { id, total_price } = await order.update({
+      item_quantity,
+      total_price: item_quantity * product.price,
+    });
+
+    return res.json({
+      id,
+      item_quantity,
+      total_price,
+    });
+  }
 }
 
 export default new OrderController();
