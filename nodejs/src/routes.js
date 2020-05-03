@@ -4,6 +4,7 @@ import ProductController from './app/controllers/ProductController';
 import ProductDetailController from './app/controllers/ProductDetailController';
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
+import OrderController from './app/controllers/OrderController';
 
 const routes = new Router();
 
@@ -21,5 +22,8 @@ routes.post('/products', ProductController.store);
 
 routes.put('/products/:id', ProductDetailController.update);
 routes.delete('/products/:id', ProductDetailController.delete);
+
+routes.get('/orders', OrderController.index);
+routes.post('/orders', OrderController.store);
 
 export default routes;
