@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import datetime
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -41,8 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd-party
-    'rest_framework'
+    'rest_framework',
+
+    # local apps
+    'basic_ecommerce.apps.users'
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
