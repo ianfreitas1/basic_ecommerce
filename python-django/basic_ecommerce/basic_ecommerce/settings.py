@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # local apps
-    'basic_ecommerce.apps.users'
+    'basic_ecommerce.apps.users',
+    'basic_ecommerce.apps.products',
 ]
 
 AUTH_USER_MODEL = 'users.User'
