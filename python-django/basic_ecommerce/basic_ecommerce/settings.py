@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # local apps
     'basic_ecommerce.apps.users',
     'basic_ecommerce.apps.products',
+    'basic_ecommerce.apps.orders',
 ]
 
 AUTH_USER_MODEL = 'users.User'
