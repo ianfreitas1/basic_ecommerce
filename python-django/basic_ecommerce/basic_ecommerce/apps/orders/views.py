@@ -5,7 +5,7 @@ from .serializers import OrderSerializer
 
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.select_related('product')
     serializer_class = OrderSerializer
 
     def create(self, request, *args, **kwargs):
