@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status
+from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
 
 from basic_ecommerce.apps.products.models import Product
@@ -56,3 +56,14 @@ class OrderViewSet(viewsets.ModelViewSet):
         product.save()
 
         return super().destroy(request, *args, **kwargs)
+
+
+class PayOrderViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = Order.objects.select_related('product')
+    serializer_class = OrderSerializer
+
+    def update(self, request, *args, **kwargs):
+        request.data = {}
+        request.data['paid'] = True
+
+        return super().update(request, *args, **kwargs)
