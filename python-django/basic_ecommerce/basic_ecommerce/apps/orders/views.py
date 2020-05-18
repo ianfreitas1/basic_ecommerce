@@ -3,13 +3,12 @@ from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
 
 from basic_ecommerce.apps.products.models import Product
-from basic_ecommerce.utils.mixins import GetObjectMixin
 
 from .models import Order
 from .serializers import OrderSerializer
 
 
-class OrderViewSet(GetObjectMixin, viewsets.ModelViewSet):
+class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.select_related('product')
     serializer_class = OrderSerializer
 
@@ -31,7 +30,7 @@ class OrderViewSet(GetObjectMixin, viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        order = self.get_object(kwargs.get('pk'))
+        order = self.get_object()
         product = order.product
 
         request_quantity = request.data['item_quantity']
@@ -48,7 +47,7 @@ class OrderViewSet(GetObjectMixin, viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
-        order = self.get_object(kwargs.get('pk'))
+        order = self.get_object()
         product = order.product
 
         product.stock += order.item_quantity
@@ -62,7 +61,7 @@ class PayOrderViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     serializer_class = OrderSerializer
 
     def update(self, request, *args, **kwargs):
-        order = self.get_object(kwargs.get('pk'))
+        order = self.get_object()
 
         if order.paid:
             return Response({'detail': 'Order already paid.'},
