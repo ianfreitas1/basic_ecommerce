@@ -67,7 +67,11 @@ class PayOrderViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
             return Response({'detail': 'Order already paid.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        request.data = {}
-        request.data['paid'] = True
+        data = {}
+        data['paid'] = True
 
-        return super().update(request, *args, **kwargs)
+        serializer = self.get_serializer(order, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
