@@ -5,12 +5,14 @@ from rest_framework.response import Response
 from basic_ecommerce.apps.products.models import Product
 
 from .models import Order
+from .permissions import ObjectPermission
 from .serializers import OrderSerializer
 
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.select_related('product')
     serializer_class = OrderSerializer
+    permission_classes = (ObjectPermission,)
 
     def create(self, request, *args, **kwargs):
         request.data['user'] = self.request.user.id
@@ -31,6 +33,8 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         order = self.get_object()
+        self.check_object_permissions(request, order)
+
         product = order.product
 
         request_quantity = request.data['item_quantity']
@@ -48,6 +52,8 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         order = self.get_object()
+        self.check_object_permissions(request, order)
+
         product = order.product
 
         product.stock += order.item_quantity
@@ -59,9 +65,11 @@ class OrderViewSet(viewsets.ModelViewSet):
 class PayOrderViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Order.objects.select_related('product')
     serializer_class = OrderSerializer
+    permission_classes = (ObjectPermission,)
 
     def update(self, request, *args, **kwargs):
         order = self.get_object()
+        self.check_object_permissions(request, order)
 
         if order.paid:
             return Response({'detail': 'Order already paid.'},
