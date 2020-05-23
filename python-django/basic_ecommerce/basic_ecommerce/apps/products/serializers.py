@@ -1,8 +1,9 @@
 from rest_framework import serializers
+from rest_framework_extensions.serializers import PartialUpdateSerializerMixin
 from .models import Product
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(PartialUpdateSerializerMixin, serializers.ModelSerializer):
 
     class Meta:
         model = Product

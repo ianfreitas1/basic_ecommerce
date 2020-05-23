@@ -27,7 +27,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
         product.stock -= request_quantity
-        product.save()
+        product.save(update_fields=['stock'])
 
         return super().create(request, *args, **kwargs)
 
@@ -46,7 +46,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
         product.stock -= quantity_diff
-        product.save()
+        product.save(update_fields=['stock'])
 
         return super().update(request, *args, **kwargs)
 
@@ -57,7 +57,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         product = order.product
 
         product.stock += order.item_quantity
-        product.save()
+        product.save(update_fields=['stock'])
 
         return super().destroy(request, *args, **kwargs)
 
