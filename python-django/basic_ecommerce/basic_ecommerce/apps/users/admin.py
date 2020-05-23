@@ -3,7 +3,8 @@ from .models import User
 
 
 class UserAdmin(admin.ModelAdmin):
-    fields = ('username', 'first_name', 'last_name', 'email', 'address')
+    fields = ('username', 'password', 'first_name',
+              'last_name', 'email', 'address')
     list_display = ('id', 'username', 'first_name', 'last_name', 'email')
 
 
