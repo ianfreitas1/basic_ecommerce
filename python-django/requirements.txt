@@ -1,7 +1,7 @@
 autopep8==1.5.2
 Django==3.0.6
 djangorestframework==3.11.0
-djangorestframework-jwt==1.11.0
+djangorestframework-simplejwt==4.4.0
 drf-extensions==0.6.0
 flake8==3.8.1
 psycopg2==2.8.5
