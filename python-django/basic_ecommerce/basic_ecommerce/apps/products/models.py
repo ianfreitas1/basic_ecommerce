@@ -1,5 +1,8 @@
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models.signals import post_delete, post_save
+
+from .signals import update_product_cache
 
 
 class Product(models.Model):
@@ -15,3 +18,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+post_save.connect(update_product_cache, sender=Product)
+post_delete.connect(update_product_cache, sender=Product)
